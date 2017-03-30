@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PdfMergerTest {
 
@@ -33,10 +34,23 @@ public class PdfMergerTest {
         final URL expected = PdfMerger.class.getResource("/sample-output.pdf");
         final File actualOutput = testFolder.newFile("output.pdf");
 
-        PdfMerger pdfMerger = new PdfMerger(pdfFiles, actualOutput.getAbsolutePath());
+        PdfMerger pdfMerger = PdfMerger.builder()
+                .inputPdfsToConcatenate(pdfFiles)
+                .ontoThisOutputFile(actualOutput.getAbsolutePath())
+                .build();
         pdfMerger.merge();
 
         assertEquals(Files.size(Paths.get(expected.toURI())), Files.size(actualOutput.toPath()));
+    }
+
+    @Test
+    public void whenNoOutputGiven_thenGenerateDefaultOutputFilename() throws Exception {
+        PdfMerger pdfMerger = PdfMerger.builder()
+                .inputPdfsToConcatenate(pdfFiles)
+                .build();
+        String output = pdfMerger.getOutputPdf();
+
+        assertNotNull(output);
     }
 
 }

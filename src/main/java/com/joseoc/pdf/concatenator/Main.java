@@ -2,8 +2,6 @@ package com.joseoc.pdf.concatenator;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,13 +25,22 @@ public final class Main {
                     .map(i -> string2Uri(i))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
-            PdfMerger pdfMerger = new PdfMerger(inputs, params.getOutput());
+
+            PdfMerger pdfMerger = PdfMerger.builder()
+                    .inputPdfsToConcatenate(inputs)
+                    .ontoThisOutputFile(params.getOutput())
+                    .build();
+
             pdfMerger.merge();
+
+            if (Files.exists(Paths.get(pdfMerger.getOutputPdf()))) {
+                System.out.println("PDF generated: " + Paths.get(pdfMerger.getOutputPdf()));
+            }
         } catch (Exception e) {
             log.error("Error concatenating PDFs. Params: \n\t" + params, e);
+            System.err.println("Error concatenating the PDF files. See the log for more information.");
         }
 
-        System.out.println("PDF generated: " + Files.exists(Paths.get(params.getOutput())));
     }
 
     private static Params parseParams(String[] args) {
