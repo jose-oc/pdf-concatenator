@@ -22,7 +22,7 @@ final class Cli {
 
         options.addOption(Option.builder("i")
                 .longOpt("inputs")
-                .hasArg()
+                .hasArgs()
                 .argName("input-file")
                 .required(true)
                 .desc("Input PDF files to be concatenated")
@@ -63,9 +63,9 @@ final class Cli {
             version();
 
         if (cmd.hasOption("i")) {
-            final String inputs = cmd.getOptionValue("i");
-            log.debug("Using cli argument -i=" + inputs);
-            params.setInputs(Arrays.stream(inputs.split(","))
+            final String[] inputs = cmd.getOptionValues("i");
+            log.debug("Using CLI argument -i=" + Arrays.toString(inputs));
+            params.setInputs(Arrays.stream(inputs)
                     .map(String::trim)
                     .collect(Collectors.toList()));
         } else {

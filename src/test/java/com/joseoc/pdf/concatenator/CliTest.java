@@ -1,18 +1,16 @@
 package com.joseoc.pdf.concatenator;
 
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CliTest {
 
     @Test
     public void parse() throws Exception {
-        String[] args = new String[] {"-i", "file1.pdf,file2.pdf, file3.pdf", "-o", "output.pdf"};
+        String[] args = new String[] {"-i", "file1.pdf", "-i", "file2.pdf", "-i", "file3.pdf", "-o", "output.pdf"};
         Cli cli = new Cli(args);
         Params params = cli.parse();
 
@@ -23,10 +21,8 @@ public class CliTest {
     }
 
     @Test
-    @Ignore
-    // TODO FIX THIS
     public void parseSpaces() throws Exception {
-        String[] args = new String[] {"-i", "file1.pdf file2.pdf file3.pdf", "-o", "output.pdf"};
+        String[] args = new String[] {"-i", "file1.pdf", "file2.pdf", "file3.pdf", "-o", "output.pdf"};
         Cli cli = new Cli(args);
         Params params = cli.parse();
 
